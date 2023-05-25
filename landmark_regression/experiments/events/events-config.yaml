@@ -1,0 +1,120 @@
+AUTO_RESUME: true
+CUDNN:
+  BENCHMARK: true
+  DETERMINISTIC: false
+  ENABLED: true
+DATA_DIR: '../../synthetic-data/sample-5/output/sample-trajectory/event-frames'
+GPUS: (0,)
+OUTPUT_DIR: 'output'
+LOG_DIR: 'log'
+WORKERS: 0
+PRINT_FREQ: 200
+
+DATASET:
+  COLOR_RGB: true
+  DATASET: EventsDataset
+  DATA_FORMAT: png
+  FLIP: false
+  NUM_JOINTS_HALF_BODY: 8
+  PROB_HALF_BODY: -1.0
+  ROOT: 'data/events/'
+  ROT_FACTOR: 30
+  SCALE_FACTOR: 0.25
+  TEST_SET: test
+  TRAIN_SET: train
+MODEL:
+  INIT_WEIGHTS: true
+  NAME: pose_hrnet
+  NUM_JOINTS: 17
+  PRETRAINED: 'models/pytorch/imagenet/hrnet_w32-36af842e.pth'
+  TARGET_TYPE: gaussian
+  IMAGE_SIZE:
+  - 512
+  - 512
+  HEATMAP_SIZE:
+  - 128
+  - 128
+  SIGMA: 2
+  EXTRA:
+    PRETRAINED_LAYERS:
+    - 'conv1'
+    - 'bn1'
+    - 'conv2'
+    - 'bn2'
+    - 'layer1'
+    - 'transition1'
+    - 'stage2'
+    - 'transition2'
+    - 'stage3'
+    - 'transition3'
+    - 'stage4'
+    FINAL_CONV_KERNEL: 1
+    STAGE2:
+      NUM_MODULES: 1
+      NUM_BRANCHES: 2
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 4
+      - 4
+      NUM_CHANNELS:
+      - 32
+      - 64
+      FUSE_METHOD: SUM
+    STAGE3:
+      NUM_MODULES: 4
+      NUM_BRANCHES: 3
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 4
+      - 4
+      - 4
+      NUM_CHANNELS:
+      - 32
+      - 64
+      - 128
+      FUSE_METHOD: SUM
+    STAGE4:
+      NUM_MODULES: 3
+      NUM_BRANCHES: 4
+      BLOCK: BASIC
+      NUM_BLOCKS:
+      - 4
+      - 4
+      - 4
+      - 4
+      NUM_CHANNELS:
+      - 32
+      - 64
+      - 128
+      - 256
+      FUSE_METHOD: SUM
+LOSS:
+  USE_TARGET_WEIGHT: true
+TRAIN:
+  BATCH_SIZE_PER_GPU: 24
+  SHUFFLE: true
+  BEGIN_EPOCH: 0
+  END_EPOCH: 40
+  OPTIMIZER: adam
+  LR: 0.001
+  LR_FACTOR: 0.1
+  LR_STEP:
+  - 25
+  - 35
+  WD: 0.0001
+  GAMMA1: 0.99
+  GAMMA2: 0.0
+  MOMENTUM: 0.9
+  NESTEROV: false
+TEST:
+  BATCH_SIZE_PER_GPU: 16
+  MODEL_FILE: '/home/bo/Outputs/spelr/PEdataset/my_hrnet768/cfg768f1/model_best.pth'
+  FLIP_TEST: false
+  POST_PROCESS: true
+  SHIFT_HEATMAP: true
+DEBUG:
+  DEBUG: true
+  SAVE_BATCH_IMAGES_GT: true
+  SAVE_BATCH_IMAGES_PRED: true
+  SAVE_HEATMAPS_GT: true
+  SAVE_HEATMAPS_PRED: true
