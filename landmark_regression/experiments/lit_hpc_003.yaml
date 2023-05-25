@@ -20,7 +20,7 @@ OUTPUT_DIR: '/home/a1226084/Outputs/spelr/'
 LOG_DIR: 'log'
 WORKERS: 0
 PRINT_FREQ: 200
-G_LOSS: 2
+D_LOSS: 2
 BETA: 0.0002
 
 DATASET:
