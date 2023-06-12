@@ -277,20 +277,20 @@ class JointsDataset(Dataset):
                 assert False, 'heatmap scales out of predefined range.'
             
             target = np.zeros((self.num_joints,
-                               self.heatmap_size[1],
-                               self.heatmap_size[0]),
+                               heatmap_size[1],
+                               heatmap_size[0]),
                               dtype=np.float32)
 
             tmp_size = self.sigma * 3
 
             for joint_id in range(self.num_joints):
-                feat_stride = self.image_size / self.heatmap_size
+                feat_stride = self.image_size / heatmap_size
                 mu_x = int(joints[joint_id][0] / feat_stride[0] + 0.5)
                 mu_y = int(joints[joint_id][1] / feat_stride[1] + 0.5)
                 # Check that any part of the gaussian is in-bounds
                 ul = [int(mu_x - tmp_size), int(mu_y - tmp_size)]
                 br = [int(mu_x + tmp_size + 1), int(mu_y + tmp_size + 1)]
-                if ul[0] >= self.heatmap_size[0] or ul[1] >= self.heatmap_size[1] \
+                if ul[0] >= heatmap_size[0] or ul[1] >= heatmap_size[1] \
                         or br[0] < 0 or br[1] < 0:
                     # If not, just return the image as is
                     target_weight[joint_id] = 0
@@ -305,11 +305,11 @@ class JointsDataset(Dataset):
                 g = np.exp(- ((x - x0) ** 2 + (y - y0) ** 2) / (2 * self.sigma ** 2))
 
                 # Usable gaussian range
-                g_x = max(0, -ul[0]), min(br[0], self.heatmap_size[0]) - ul[0]
-                g_y = max(0, -ul[1]), min(br[1], self.heatmap_size[1]) - ul[1]
+                g_x = max(0, -ul[0]), min(br[0], heatmap_size[0]) - ul[0]
+                g_y = max(0, -ul[1]), min(br[1], heatmap_size[1]) - ul[1]
                 # Image range
-                img_x = max(0, ul[0]), min(br[0], self.heatmap_size[0])
-                img_y = max(0, ul[1]), min(br[1], self.heatmap_size[1])
+                img_x = max(0, ul[0]), min(br[0], heatmap_size[0])
+                img_y = max(0, ul[1]), min(br[1], heatmap_size[1])
 
                 v = target_weight[joint_id]
                 if v > 0.5:
