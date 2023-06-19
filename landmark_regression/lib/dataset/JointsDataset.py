@@ -281,7 +281,7 @@ class JointsDataset(Dataset):
                                heatmap_size[0]),
                               dtype=np.float32)
 
-            tmp_size = self.sigma * 3
+            tmp_size = sigma * 3
 
             for joint_id in range(self.num_joints):
                 feat_stride = self.image_size / heatmap_size
@@ -302,7 +302,7 @@ class JointsDataset(Dataset):
                 y = x[:, np.newaxis]
                 x0 = y0 = size // 2
                 # The gaussian is not normalized, we want the center value to equal 1
-                g = np.exp(- ((x - x0) ** 2 + (y - y0) ** 2) / (2 * self.sigma ** 2))
+                g = np.exp(- ((x - x0) ** 2 + (y - y0) ** 2) / (2 * sigma ** 2))
 
                 # Usable gaussian range
                 g_x = max(0, -ul[0]), min(br[0], heatmap_size[0]) - ul[0]
