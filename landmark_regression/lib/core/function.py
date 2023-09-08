@@ -410,7 +410,7 @@ def validate(config, val_loader, val_dataset, model, criterion, output_dir,
                 logger.info(msg)
 
                 prefix = '{}_{}'.format(
-                    os.path.join(output_dir, name_pre), i
+                    os.path.join(output_dir, 'test'), i
                 )
                 save_debug_images(config, input, meta, target, 
                                   pred*(config.MODEL.IMAGE_SIZE[0]/float(config.MODEL.HEATMAP_SIZE[0])), 
