@@ -173,6 +173,16 @@ class JointsDataset(Dataset):
                     joints, joints_vis, data_numpy.shape[1], self.flip_pairs)
                 c[0] = data_numpy.shape[1] - c[0] - 1
 
+
+        # Add center jitter to replicate imperfect bounding boxes detected using detectron2.
+        # if 'train' in self.image_set:
+        #     w = db_rec['box_w']
+        #     h = db_rec['box_h']
+        #     x_jitter = int(w * 0.20)
+        #     y_jitter = int(h * 0.20)
+        #     c[0] = c[0] + np.random.randint(-x_jitter, x_jitter) 
+        #     c[1] = c[1] + np.random.randint(-y_jitter, y_jitter)
+        
         # do visual transforms before the cropping to bounding box
         if self.numpy_transform:
            data_numpy = self.numpy_transform(data_numpy)
